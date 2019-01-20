@@ -4,15 +4,17 @@
     "description": "GraphQL + React + + Mongoose + MongoDB project of event booking app.",
     "main": "index.js",
     "scripts": {
-        "start": "nodemon  --experimental-modules  app.mjs",
+        "start": "nodemon app.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
         "body-parser": "^1.18.3",
-        "eslint": "^5.12.0",
+        "eslint": "^5.12.1",
         "express": "^4.16.4",
+        "express-graphql": "^0.7.1",
+        "graphql": "^14.0.1",
         "nodemon": "^1.18.9"
     }
 }
