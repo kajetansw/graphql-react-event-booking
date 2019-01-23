@@ -16,11 +16,12 @@
     "plugins": [],
     "rules": {
         "indent": ["error", 4],
-        "quotes": ["error", "single"],
+        "quotes": ["error", "single", { "allowTemplateLiterals": true }],
         "semi": ["error", "always"],
         "object-curly-spacing": ["error", "always"],
         "prefer-const": "error",
         "newline-per-chained-call": ["error", { "ignoreChainWithDepth": 3 }],
-        "no-unused-vars": ["warn"]
+        "no-unused-vars": ["warn"],
+        "no-console": "warn"
     }
 }
