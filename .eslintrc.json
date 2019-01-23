@@ -20,7 +20,7 @@
         "semi": ["error", "always"],
         "object-curly-spacing": ["error", "always"],
         "prefer-const": "error",
-        "newline-per-chained-call": ["error", { "ignoreChainWithDepth": 1 }],
+        "newline-per-chained-call": ["error", { "ignoreChainWithDepth": 3 }],
         "no-unused-vars": ["warn"]
     }
 }
