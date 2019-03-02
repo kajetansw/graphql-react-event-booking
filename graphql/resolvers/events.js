@@ -1,3 +1,5 @@
+//@ts-check
+
 const Event = require('../../models/event');
 const User = require('../../models/user');
 const { transformEvent } = require('./merge');
@@ -15,19 +17,23 @@ module.exports = {
             });
     },
 
-    createEvent: args => {
+    createEvent: (args, req) => {
+        if (!req.isAuth) {
+            throw new Error('Unauthenticated!');
+        }
+
         const event = new Event({
             title: args.eventInput.title,
             description: args.eventInput.description,
             price: +args.eventInput.price,
             date: new Date(args.eventInput.date),
-            creator: '5c5c7d5aba39792e40264972'
+            creator: req.userId
         });
         let createdEvent;
         return event.save()
             .then(result => {
                 createdEvent = transformEvent(result);
-                return User.findById('5c5c7d5aba39792e40264972');
+                return User.findById(req.userId);
             })
             .then(user => {
                 if (!user) {
