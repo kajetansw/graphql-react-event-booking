@@ -3,7 +3,7 @@ const bookingResolvers = require('./booking');
 const authResolvers = require('./auth');
 
 module.exports = {
-    ...eventResolvers,
-    ...bookingResolvers,
-    ...authResolvers
+  ...eventResolvers,
+  ...bookingResolvers,
+  ...authResolvers
 };
