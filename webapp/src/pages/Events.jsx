@@ -3,12 +3,14 @@ import Modal from '../components/modal/Modal';
 import Backdrop from '../components/backdrop/Backdrop';
 import AuthContext from '../context/auth-context';
 import EventList from '../components/events/event-list/EventList';
+import Spinner from '../components/spinner/Spinner';
 import './Events.css';
 
 class EventsPage extends Component {
   state = {
     creating: false,
-    events: []
+    events: [],
+    isLoading: false
   };
 
   static contextType = AuthContext;
@@ -39,7 +41,7 @@ class EventsPage extends Component {
     const description = this.descriptionElRef.current.value;
 
     if (title.trim().length === 0 || price < 0 ||
-        date.trim().length === 0 || description.trim().length === 0) {
+      date.trim().length === 0 || description.trim().length === 0) {
       return;
     }
 
@@ -57,10 +59,6 @@ class EventsPage extends Component {
             description
             date
             price
-            creator {
-              _id
-              email
-            }
           }
         }
       `
@@ -81,7 +79,24 @@ class EventsPage extends Component {
         return res.json();
       })
       .then(resData => {
-        this.fetchEvents();
+        this.setState(prevState => {
+          const updatedEvents = [...prevState.events];
+          updatedEvents.push({
+            _id: resData.data.createEvent._id,
+            title: resData.data.createEvent.title,
+            description: resData.data.createEvent.description,
+            date: resData.data.createEvent.date,
+            price: resData.data.createEvent.price,
+            creator: {
+              _id: this.context.userId
+            }
+          });
+
+          return {
+            ...this.state,
+            events: updatedEvents
+          };
+        });
       })
       .catch(err => console.log(err));
   };
@@ -94,6 +109,7 @@ class EventsPage extends Component {
   };
 
   fetchEvents = () => {
+    this.setState({ ...this.state, isLoading: true });
     const requestBody = {
       query: `
         query {
@@ -129,10 +145,14 @@ class EventsPage extends Component {
         const { events } = resData.data;
         this.setState({
           ...this.state,
+          isLoading: false,
           events
         });
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err);
+        this.setState({ isLoading: false });
+      });
   };
 
   render() {
@@ -181,10 +201,13 @@ class EventsPage extends Component {
           </div>
         )}
 
-        <EventList
-          events={this.state.events}
-          authUserId={this.context.userId}
-        />
+        {this.state.isLoading
+          ? <Spinner />
+          : <EventList
+              events={this.state.events}
+              authUserId={this.context.userId}
+            />
+        }
       </React.Fragment>
     );
   }
